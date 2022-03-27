@@ -1,8 +1,11 @@
+import Home from "./pages/Home";
+
+import './styles/global.scss'
+
 function App() {
   return (
-    <div>
-      <h1>Hello World</h1>      
-
+    <div>   
+      <Home />
     </div>
   );
 }
