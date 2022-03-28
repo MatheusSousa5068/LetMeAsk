@@ -7,19 +7,20 @@ import googleIconImg from "../assets/images/google-icon.svg";
 import Button from "../components/Button";
 
 import "../styles/auth&newRoom.scss";
-import { auth, firebase } from "../services/firebase";
+
+import { useAuth } from "../hooks/useAuth";
 
 function Home() {
-    const history = useNavigate();
+    const { user, loginWithGoogle } = useAuth()
+    const navigate = useNavigate();
 
-    function handleCreateRoom() {
-        const provider = new firebase.auth.GoogleAuthProvider();
 
-        auth.signInWithPopup(provider).then((result) => {
-            console.log(result);
-        });
+    async function handleCreateRoom() {
+        if (!user) {
+            await loginWithGoogle()
+        }
 
-        history("/rooms/new");
+        navigate("/rooms/new");
     }
 
     return (

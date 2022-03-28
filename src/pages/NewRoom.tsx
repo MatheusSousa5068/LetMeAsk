@@ -7,7 +7,12 @@ import "../styles/auth&newRoom.scss";
 
 import Button from "../components/Button";
 
+import { useAuth } from "../hooks/useAuth";
+
+
 function NewRoom() {
+    const { user } = useAuth()
+
     return (
         <div id="page-auth">
             <aside>
