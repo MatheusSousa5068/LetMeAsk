@@ -50,9 +50,8 @@ function useRoom(roomID: string) {
             const parsedQuestions = await Object.entries(firebaseQuestions).map(
                 ([key, value]) => {
                     Object.keys(value).map((value) => {
-                        console.table(value)
-                    })
-
+                        console.table(value);
+                    });
 
                     return {
                         id: key,
@@ -63,11 +62,10 @@ function useRoom(roomID: string) {
                         likeCount: Object.values(value.likes ?? {}).length,
                         likeID: Object.entries(value.likes ?? {}).find(
                             ([key, like]) => like.authorId === user?.id
-                        )?.[0]
+                        )?.[0],
                     };
                 }
             );
-
 
             setTitle(databaseRoom.title);
             setQuestions(parsedQuestions);

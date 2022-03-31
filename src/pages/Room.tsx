@@ -102,6 +102,7 @@ function Room() {
                                 Para enviar uma pergunta, <button>faça seu login</button>.
                             </span>
                         )}
+                        
                         <Button type="submit" disabled={!user}>
                             Enviar pergunta
                         </Button>
@@ -115,8 +116,10 @@ function Room() {
                                 key={question.id}
                                 content={question.content}
                                 author={question.author}
+                                isAnswered={question.isAnswered}
+                                isHighlighted={question.isHighlighted}
                             >
-                                <button
+                                {!question.isAnswered && <button
                                     className={`like-button ${
                                         question.likeID ? "liked" : ""
                                     }`}
@@ -147,7 +150,7 @@ function Room() {
                                             strokeLinejoin="round"
                                         />
                                     </svg>
-                                </button>
+                                </button>}
                             </Question>
                         );
                     })}

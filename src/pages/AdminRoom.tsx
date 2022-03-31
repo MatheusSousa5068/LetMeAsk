@@ -2,6 +2,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import logoImg from "../assets/images/logo.svg";
 import deleteImg from "../assets/images/delete.svg";
+import checkImg from "../assets/images/check.svg";
+import answerImg from "../assets/images/answer.svg";
 
 import Button from "../components/Button";
 import Question from "../components/Question";
@@ -12,6 +14,7 @@ import useRoom from "../hooks/useRoom";
 import { database } from "../services/firebase";
 
 import "../styles/Room.scss";
+import { Fragment } from "react";
 
 type RoomParams = {
     id: string;
@@ -20,22 +23,38 @@ type RoomParams = {
 function AdminRoom() {
     const params = useParams<RoomParams>();
     const roomID = params.id;
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const { title, questions } = useRoom(roomID!);
 
     async function handleEndRoom() {
         await database.ref(`rooms/${roomID}`).update({
-            endedAt: new Date()
-        })
+            endedAt: new Date(),
+        });
 
-        navigate('/')
+        navigate("/");
     }
 
     async function handleDeleteQuestion(questionId: string) {
-        if (window.confirm("Você tem certeza ue deseja excluir esta pergunta?")) {
-            await database.ref(`rooms/${roomID}/questions/${questionId}`).remove()
+        if (
+            window.confirm("Você tem certeza ue deseja excluir esta pergunta?")
+        ) {
+            await database
+                .ref(`rooms/${roomID}/questions/${questionId}`)
+                .remove();
         }
+    }
+
+    async function handleCheckQuestionAsAnswered(questionId: string) {
+        await database.ref(`rooms/${roomID}/questions/${questionId}`).update({
+            isAnswered: true,
+        });
+    }
+
+    async function handleHighlightQuestion(questionId: string) {
+        await database.ref(`rooms/${roomID}/questions/${questionId}`).update({
+            isHighlighted: true,
+        });
     }
 
     return (
@@ -45,7 +64,9 @@ function AdminRoom() {
                     <img src={logoImg} alt="Logo da Aplicação" />
                     <div>
                         <RoomCode code={roomID!} />
-                        <Button isOutlined onClick={handleEndRoom}>Encerrar Sala</Button>
+                        <Button isOutlined onClick={handleEndRoom}>
+                            Encerrar Sala
+                        </Button>
                     </div>
                 </div>
             </header>
@@ -65,7 +86,41 @@ function AdminRoom() {
                                 key={question.id}
                                 content={question.content}
                                 author={question.author}
+                                isAnswered={question.isAnswered}
+                                isHighlighted={question.isHighlighted}
                             >
+                                {!question.isAnswered && (
+                                    <Fragment>
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                handleCheckQuestionAsAnswered(
+                                                    question.id
+                                                )
+                                            }
+                                        >
+                                            <img
+                                                src={checkImg}
+                                                alt="Pergunta respondida"
+                                            />
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                handleHighlightQuestion(
+                                                    question.id
+                                                )
+                                            }
+                                        >
+                                            <img
+                                                src={answerImg}
+                                                alt="Pergunta em destaque"
+                                            />
+                                        </button>
+                                    </Fragment>
+                                )}
+
                                 <button
                                     type="button"
                                     onClick={() =>
