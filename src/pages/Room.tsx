@@ -94,7 +94,7 @@ function Room() {
                     <div className="form-footer">
                         {user ? (
                             <div className="user-info">
-                                <img src={user.avatar} alt={user.name} />
+                                <img src={user.avatar} referrerPolicy="no-referrer" alt={user.name} />
                                 <span>{user.name}</span>
                             </div>
                         ) : (

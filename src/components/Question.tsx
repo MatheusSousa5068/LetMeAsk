@@ -18,7 +18,7 @@ function Question(props: QuestionProps) {
 
             <footer>
                 <div className="user-info">
-                    <img src={props.author.avatar} alt={props.author.name} />
+                    <img src={props.author.avatar} referrerPolicy="no-referrer" alt={props.author.name} />
                     <span>{props.author.name}</span>
                 </div>
 
